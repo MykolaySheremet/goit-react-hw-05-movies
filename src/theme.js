@@ -38,5 +38,8 @@ export const theme = {
     none: '0',
     normal: '4px',
     round: '50%',
-  },
+    },
+    shadows: {
+    bot:  '0 7px 7px -7px rgba(0, 0, 0, .5)',
+  }
 };
