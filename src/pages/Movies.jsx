@@ -1,9 +1,11 @@
 import SerchBox from "components/SerchBox/SerchBox"
 import { useState, useEffect } from "react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams} from "react-router-dom";
 import { fechQueryFilm } from '../utils/FechQueryFilm';
 import { Box } from '../components/Box/Box';
 import { ListFindFilms } from '../components/ListFindFilms/ListFindFilms';
+import { Loader } from '../components/Loader/Loader';
+import Notiflix from 'notiflix';
 
 
 
@@ -12,26 +14,32 @@ export const Movies = () => {
     const [searchParams, setSerchParams] = useSearchParams();
     const serchQuery = searchParams.get('query');
     const [error, setError] = useState(null);
+    const [loader, setLoader] = useState(false);
 
-    console.log(serchQuery);
+    // console.log(serchQuery);
 
     useEffect(() => {
-        console.log('works')
+        // console.log('works')
 
         if (serchQuery === "" || serchQuery === null) {
-            return;
+            return ;
         }
+
+        setLoader(true);
 
         fechQueryFilm(serchQuery)
             .then(({ results }) => { 
-                console.log(results);
-                if (results === 0) {
-                // setLoader(false);
-                // setError(Error)
+                // console.log(results.length);
+                if (results.length === 0) {
+                    // console.log('works');
+                    setFindFilm([]);
+                    setLoader(false);
+                    setError(Error);
                 return Promise.reject(new Error(`Sorry, but we can't film with name ${serchQuery}. Try again.`))
                 }
-
+                setLoader(false);
                 setFindFilm(results);
+                setError(null);
             })
             .catch(error => {
         setError(error);
@@ -43,15 +51,20 @@ export const Movies = () => {
 
 
     const serchFilm = value => {
+
+        if (value === serchQuery) {
+            return Notiflix.Notify.failure('Enter new query for serch, result of this query you already can see ');
+        }
         setSerchParams(value !== "" ? {query:value} : {})
 
-        console.log(value);
     }
     
 
   return (
     <main>
-        <SerchBox onChange={serchFilm} />
+          <SerchBox onChange={serchFilm} value={serchQuery} />
+          {loader && <Loader></Loader>}
+          {error && <div>{error.message} </div>}
         {findFilm &&
         <Box as="ul" p={4}>
             {<ListFindFilms arrayFindFilms={findFilm}></ListFindFilms>}

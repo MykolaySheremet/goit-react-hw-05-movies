@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { fechTrendingMovies } from '../utils/FetchMovies';
 import { ListTrandingMovies } from '../components/ListTrendingMovies/ListTrendingMovies';
+import { Loader } from '../components/Loader/Loader';
 
 export const Home = () => {
     const [trendingMovies, setTrendingPictures] = useState([]);
@@ -23,7 +24,8 @@ export const Home = () => {
             setError(Error)
             return Promise.reject(new Error(`Sorry, but we can't find TrendingsMovies today. Try again.`))
             }
-
+            setLoader(false);
+            setError(null);
             setTrendingPictures(results);
         })
       .catch(error => {
@@ -32,6 +34,11 @@ export const Home = () => {
      },[])    
     
     return (
-        <ListTrandingMovies arrayTrendingMovies={trendingMovies}> </ListTrandingMovies >
+        <>
+            {error && <div>{error.message} </div>}
+            {loader && <Loader></Loader>}
+            <ListTrandingMovies arrayTrendingMovies={trendingMovies}> </ListTrandingMovies >
+        </>
+        
     );
 };

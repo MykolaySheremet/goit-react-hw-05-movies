@@ -1,30 +1,27 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 import { fechFilmDetails } from '../../utils/FechFilmDetails';
 import { Box } from '../Box/Box';
-import { NavLink } from 'react-router-dom';
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FilmTitle,Score,OverviewTitle,ButtonGoBack,Overview,GenresTitle,NavLinkMoviesDetails,AddInformation } from './MovieDetails.styled';
 
 export const MovieDetails = () => {
     const { renderId } = useParams();
-    const [filmDetails, setFilmsDetails]  = useState('null');
-    const [loader, setLoader] = useState(false);
+    const [filmDetails, setFilmsDetails] = useState('null');
     const [error, setError] = useState(null);
     const navigate = useNavigate();
-    
+
 
     useEffect(() => {
-        setLoader(true);
 
-        fechFilmDetails(renderId)
+        fechFilmDetails(Number(renderId))
             .then((response) => {
-                console.log(response)
+                // console.log(response)
                 if (response.length === 0) {
-                    setLoader(false);
                     setError(Error)
                     return Promise.reject(new Error(`Sorry, but we can't find Details this film. Try again.`))
                 }
+                setError(null);
                 setFilmsDetails(response);
             })
             .catch(error => {
@@ -41,14 +38,7 @@ export const MovieDetails = () => {
     function receiveYear(dataFilm) {
 
         return new Date(dataFilm).getFullYear()
-        // const data = new Date(dataFilm);
-        // const year = data.getFullYear();
-        // return year;
     }
-    
-    // const data = new Date(release_date)
-    // const year = data.getFullYear()
-    // console.log(vote_average);
 
     function receivePercentage(number) {
         return (number*10).toFixed(0);
@@ -61,7 +51,7 @@ export const MovieDetails = () => {
 
     return (
         <>
-            
+            {error && <div>{error.message} </div>}
             <ButtonGoBack onClick={goBack}>
                 <RiArrowGoBackFill></RiArrowGoBackFill> goBack
             </ButtonGoBack>
