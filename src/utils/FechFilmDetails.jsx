@@ -13,7 +13,7 @@ function fechFilmDetails (id) {
             }
 
             return Promise.reject(
-                new Error(`Sorry, but we can't find ${this.props.searchPictures}. Try more`)
+                new Error(`Sorry, but we can't find details information about this film. Try more`)
             );
         }))
 };

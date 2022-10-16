@@ -10,7 +10,7 @@ function fechTrendingMovies () {
             }
 
             return Promise.reject(
-                new Error(`Sorry, but we can't find ${this.props.searchPictures}. Try more`)
+                new Error(`Sorry, but we can't find any films which are in trending today. Try more`)
             );
         }))
 };

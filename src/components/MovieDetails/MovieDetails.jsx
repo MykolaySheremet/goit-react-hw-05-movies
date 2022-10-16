@@ -1,14 +1,17 @@
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fechFilmDetails } from '../../utils/FechFilmDetails';
 import { Box } from '../Box/Box';
 import { NavLink } from 'react-router-dom';
+import { RiArrowGoBackFill } from "react-icons/ri";
+import { FilmTitle,Score,OverviewTitle,ButtonGoBack,Overview,GenresTitle,NavLinkMoviesDetails,AddInformation } from './MovieDetails.styled';
 
 export const MovieDetails = () => {
     const { renderId } = useParams();
     const [filmDetails, setFilmsDetails]  = useState('null');
     const [loader, setLoader] = useState(false);
     const [error, setError] = useState(null);
+    const navigate = useNavigate();
     
 
     useEffect(() => {
@@ -53,29 +56,35 @@ export const MovieDetails = () => {
    
 
 
-
-
+    const goBack = () => navigate(-1);
 
 
     return (
         <>
-        <Box as="section" p={4} display="flex" > 
             
-            <img src={`https://www.themoviedb.org/t/p/w500${poster_path}`} alt={title} width='300' />
-            <h2>{original_title} {receiveYear(release_date)}</h2>
-            <p> User score: {receivePercentage(vote_average)} %</p>
-            <h3>Overview</h3>
-            <p>{overview}</p>
-            <h4>Overview</h4>
-            {genres && <p>{ genres.map(item => item.name ).join(', ')}</p>}
-            {/* <p>{genres.map((item)=>item.name)}</p> */}
+            <ButtonGoBack onClick={goBack}>
+                <RiArrowGoBackFill></RiArrowGoBackFill> goBack
+            </ButtonGoBack>
+            <Box as="section" p={4} display="flex" boxShadow="0 5px 5px -5px rgba(0, 0, 0, .5)"> 
+            
+                <img src={`https://www.themoviedb.org/t/p/w500${poster_path}`} alt={title} width='300' />
+                <Box p={4} >
+                    <FilmTitle>{original_title} {receiveYear(release_date)}</FilmTitle>
+                    <Score> User score: {receivePercentage(vote_average)} % </Score>
+                    <OverviewTitle>Overview</OverviewTitle>
+                    <Overview>{overview}</Overview>
+                    <GenresTitle>Genres</GenresTitle>
+                    {genres && <p>{ genres.map(item => item.name ).join(', ')}</p>}
+                </Box>
+                
             </Box>
             
-        <div>Additional Information
-                <NavLink to="cast" > Cast</NavLink>
-                <NavLink to="reviews"> Review</NavLink>
-        </div>
-            </>
+            <Box boxShadow="0 5px 5px -5px rgba(0, 0, 0, .5)" display="block" p={4} >
+                <AddInformation>Additional Information</AddInformation>
+                <NavLinkMoviesDetails to="cast" > Cast</NavLinkMoviesDetails>
+                <NavLinkMoviesDetails to="reviews"> Review</NavLinkMoviesDetails>
+            </Box>
+        </>
 
     )
 }
