@@ -9,7 +9,7 @@ import Notiflix from 'notiflix';
 
 
 
-export const Movies = () => {
+const Movies = () => {
     const [findFilm, setFindFilm ] = useState([]);
     const [searchParams, setSerchParams] = useSearchParams();
     const serchQuery = searchParams.get('query');
@@ -74,3 +74,5 @@ export const Movies = () => {
     </main>
   )
 }
+
+export default Movies;

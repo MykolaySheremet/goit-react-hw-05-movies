@@ -1,11 +1,11 @@
-import { useState, useEffect } from "react";
-import { useNavigate, useParams} from "react-router-dom";
+import { useState, useEffect, Suspense} from "react";
+import { useNavigate, useParams, Outlet} from "react-router-dom";
 import { fechFilmDetails } from '../../utils/FechFilmDetails';
 import { Box } from '../Box/Box';
 import { RiArrowGoBackFill } from "react-icons/ri";
 import { FilmTitle,Score,OverviewTitle,ButtonGoBack,Overview,GenresTitle,NavLinkMoviesDetails,AddInformation } from './MovieDetails.styled';
 
-export const MovieDetails = () => {
+const MovieDetails = () => {
     const { renderId } = useParams();
     const [filmDetails, setFilmsDetails] = useState('null');
     const [error, setError] = useState(null);
@@ -74,9 +74,13 @@ export const MovieDetails = () => {
                 <NavLinkMoviesDetails to="cast" > Cast</NavLinkMoviesDetails>
                 <NavLinkMoviesDetails to="reviews"> Review</NavLinkMoviesDetails>
             </Box>
+            <Suspense fallback={null}>
+                <Outlet/>
+            </Suspense>
         </>
 
     )
 }
 
-// www.themoviedb.org/t/p/w500$/qvg75YJMfbHeDNirUrrgBMQImRn.jpg
+export default MovieDetails;
+
