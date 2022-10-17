@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Notiflix from 'notiflix';
-import { Form,Input,Button } from './SerchBox.styled';
+import { Form, Input, Button } from './SerchBox.styled';
+import PropTypes from 'prop-types';
 
 
 export default function SerchBox({ onChange, value }) {
@@ -38,4 +39,9 @@ export default function SerchBox({ onChange, value }) {
           <Button type="submit">Serch</Button>
       </Form>
   )
+}
+
+SerchBox.propTypes = {
+    onChange: PropTypes.func,
+    value: PropTypes.string,
 }

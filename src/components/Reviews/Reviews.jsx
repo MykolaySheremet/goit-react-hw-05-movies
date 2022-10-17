@@ -9,18 +9,20 @@ import {TitleError,TitleAuthor,TextReviews,ItemReviews} from './Reviews.styled'
 const Reviews = () => {
     const [reviews, setReviews] = useState(null);
     const { renderId } = useParams();
+    const [error, setError] = useState(null);
 
     useEffect(() => {
 
         fechReviews(Number(renderId))
             .then((response) => {
-                console.log(response.results);
+                // console.log(response.results);
 
                 setReviews(response);
+                setError(null);
                 
             })
             .catch(error => {
-                Promise.reject(new Error(`${error.message}`))
+                setError(error)
             })
     },[renderId]);
 
@@ -28,13 +30,14 @@ const Reviews = () => {
         return null
     }
 
-    console.log(reviews);
+    // console.log(reviews);
 
 
 
 
     return (
         <Box as="ul" p={4}>
+            {error && <div>{error.message} </div>}
             {reviews.results.length !== 0
                 
                 ? reviews.results.map(({ id, author, content }) => {
@@ -56,41 +59,7 @@ const Reviews = () => {
 
 export default Reviews;
 
-// const Reviews = () => {
 
-//     const [reviews, setResponse] = useState(null)
-//     const { renderId } = useParams();
-    
-//     useEffect(() => {
-//         fechReviews(Number(renderId))
-//             .then(setResponse)
-//             .catch(error => {
-//                 Promise.reject(new Error(`${error.message}`))
-//             })
-//     }, [renderId]);
-
-//     if (!reviews) {
-//         return null
-//     }
-
-//     const { results } = reviews;
-
-//     return (<ul>
-//         {results.length !== 0
-//             ? results.map(({ id, author, content }) => {
-//                 return (
-//                     <ItemReviews key={id}>
-//                         <TitleAuthor>Author: {author}</TitleAuthor>
-//                         <TextReviews> { content}</TextReviews>
-//                     </ItemReviews>
-//                     )
-//                 })
-//             : <p>  Sorry, we haven`t reviews yet!</p>
-//         }
-//     </ul>)
-// }
-
-// export default Reviews;
 
 
 

@@ -1,15 +1,18 @@
 import { useState, useEffect, Suspense} from "react";
-import { useNavigate, useParams, Outlet} from "react-router-dom";
+import { useParams, Outlet,useLocation} from "react-router-dom";
 import { fechFilmDetails } from '../../utils/FechFilmDetails';
 import { Box } from '../Box/Box';
 import { RiArrowGoBackFill } from "react-icons/ri";
-import { FilmTitle,Score,OverviewTitle,ButtonGoBack,Overview,GenresTitle,NavLinkMoviesDetails,AddInformation } from './MovieDetails.styled';
+import NotFoundPictureBig from '../../img/bignophoto.jpg';
+import { FilmTitle,Score,OverviewTitle,Overview,GenresTitle,NavLinkMoviesDetails,AddInformation,LinkGoBack } from './MovieDetails.styled';
 
 const MovieDetails = () => {
     const { renderId } = useParams();
     const [filmDetails, setFilmsDetails] = useState('null');
     const [error, setError] = useState(null);
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
+    const location = useLocation();
+    // console.log("location.state.from",location.state.from);
 
 
     useEffect(() => {
@@ -46,18 +49,25 @@ const MovieDetails = () => {
    
 
 
-    const goBack = () => navigate(-1);
+    // const goBack = () => {
+    //     return  <Navigate to="/" />;
+    // }
 
 
     return (
         <>
             {error && <div>{error.message} </div>}
-            <ButtonGoBack onClick={goBack}>
+            <LinkGoBack to={location.state?.from?? "/movies"}> <RiArrowGoBackFill></RiArrowGoBackFill> </LinkGoBack>
+            {/* <ButtonGoBack onClick={goBack}>
                 <RiArrowGoBackFill></RiArrowGoBackFill> goBack
-            </ButtonGoBack>
+            </ButtonGoBack> */}
             <Box as="section" p={4} display="flex" boxShadow="0 5px 5px -5px rgba(0, 0, 0, .5)"> 
-            
-                <img src={`https://www.themoviedb.org/t/p/w500${poster_path}`} alt={title} width='300' />
+                
+                {poster_path
+                    ? <img src={`https://www.themoviedb.org/t/p/w500${poster_path}`} alt={title} width='300' />
+                    : <img src={NotFoundPictureBig} alt={title} width='300' />
+                }
+                
                 <Box p={4} >
                     <FilmTitle>{original_title} {receiveYear(release_date)}</FilmTitle>
                     <Score> User score: {receivePercentage(vote_average)} % </Score>
@@ -71,8 +81,8 @@ const MovieDetails = () => {
             
             <Box boxShadow="0 5px 5px -5px rgba(0, 0, 0, .5)" display="block" p={4} >
                 <AddInformation>Additional Information</AddInformation>
-                <NavLinkMoviesDetails to="cast" > Cast</NavLinkMoviesDetails>
-                <NavLinkMoviesDetails to="reviews"> Review</NavLinkMoviesDetails>
+                <NavLinkMoviesDetails to="cast" state={{ from: location.state?.from ?? '/movies' }} > Cast</NavLinkMoviesDetails>
+                <NavLinkMoviesDetails to="reviews" state={{ from: location.state?.from ?? '/movies' }} > Review</NavLinkMoviesDetails>
             </Box>
             <Suspense fallback={null}>
                 <Outlet/>
